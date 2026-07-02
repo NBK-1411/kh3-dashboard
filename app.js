@@ -55,14 +55,25 @@ const data = {
     { label: "Resource library", detail: "Forms and templates", icon: "folder" }
   ],
   approvals: [
-    { title: "Laptop replacement", meta: "Due today - IT request", status: "Urgent", tone: "danger" },
-    { title: "Leave request", meta: "Ama Owusu - 3 days", status: "Review", tone: "warning" },
-    { title: "Policy update", meta: "HR draft acknowledgement", status: "Ready", tone: "success" }
+    { id: "ap-1", title: "Laptop replacement", meta: "Due today - IT request", status: "Urgent", tone: "danger" },
+    { id: "ap-2", title: "Leave request", meta: "Ama Owusu - 3 days", status: "Review", tone: "warning" },
+    { id: "ap-3", title: "Policy update", meta: "HR draft acknowledgement", status: "Ready", tone: "success" }
   ],
   announcements: [
     { title: "Quarterly town hall", meta: "Required acknowledgement by July 5", tone: "warning" },
     { title: "New hybrid work policy", meta: "Published by HR", tone: "success" },
     { title: "Security reminder", meta: "MFA enrollment closes Friday", tone: "danger" }
+  ],
+  tasks: [
+    { title: "Review facilities request", owner: "Operations", due: "Today", status: "Needs decision", tone: "danger" },
+    { title: "Acknowledge security policy", owner: "IT Security", due: "Tomorrow", status: "Required", tone: "warning" },
+    { title: "Update team contact list", owner: "People Ops", due: "Jul 5", status: "Open", tone: "success" }
+  ],
+  notifications: [
+    { title: "Approval waiting", detail: "Laptop replacement needs your decision today.", time: "8 min ago", tone: "danger" },
+    { title: "Town hall acknowledgement", detail: "Please acknowledge the quarterly town hall notice.", time: "1 hr ago", tone: "warning" },
+    { title: "Resource updated", detail: "The hybrid work policy was revised by HR.", time: "Yesterday", tone: "success" },
+    { title: "New joiner", detail: "Akosua Mensah joins HR next week.", time: "Yesterday", tone: "success" }
   ]
 };
 
@@ -149,6 +160,8 @@ renderCalendar();
 renderQuickLinks();
 renderApprovals();
 renderAnnouncements();
+renderWorkQueue();
+renderNotifications();
 bindInteractions();
 
 function setTheme(theme) {
@@ -250,7 +263,10 @@ function renderApprovals() {
         <h3>${item.title}</h3>
         <p>${item.meta}</p>
       </div>
-      <span class="status-badge ${item.tone}">${item.status}</span>
+      <div class="approval-actions">
+        <span class="status-badge ${item.tone}">${item.status}</span>
+        <button class="link-button" type="button" data-approval-action="${item.id}">Review</button>
+      </div>
     </article>
   `).join("");
 }
@@ -268,7 +284,39 @@ function renderAnnouncements() {
   `).join("");
 }
 
+function renderWorkQueue() {
+  const target = document.querySelector("#work-queue");
+  target.innerHTML = data.tasks.map((item) => `
+    <article class="task-card">
+      <div>
+        <h3>${item.title}</h3>
+        <p>${item.owner} - Due ${item.due}</p>
+      </div>
+      <span class="status-badge ${item.tone}">${item.status}</span>
+    </article>
+  `).join("");
+}
+
+function renderNotifications() {
+  const target = document.querySelector("#notification-list");
+  target.innerHTML = data.notifications.map((item) => `
+    <article class="notification-row">
+      <span class="notification-status ${item.tone}" aria-hidden="true"></span>
+      <div>
+        <h3>${item.title}</h3>
+        <p>${item.detail}</p>
+        <small>${item.time}</small>
+      </div>
+    </article>
+  `).join("");
+}
+
 function bindInteractions() {
+  const requestDialog = document.querySelector("#request-dialog");
+  const requestForm = document.querySelector("#request-form");
+  const notificationsButton = document.querySelector("#notifications-button");
+  const notificationDrawer = document.querySelector("#notification-drawer");
+
   document.querySelector("#theme-toggle").addEventListener("click", () => {
     setTheme(root.dataset.theme === "dark" ? "light" : "dark");
   });
@@ -288,15 +336,53 @@ function bindInteractions() {
   });
 
   document.querySelector("#new-request-button").addEventListener("click", () => {
-    navigate("requests");
-    showToast("Request catalog opened", "Choose a request type to continue.");
+    requestDialog.showModal();
+    document.querySelector("#request-type").focus();
+  });
+
+  document.querySelector("#close-request-dialog").addEventListener("click", () => {
+    requestDialog.close();
+  });
+
+  document.querySelector("#cancel-request").addEventListener("click", () => {
+    requestDialog.close();
+  });
+
+  requestForm.addEventListener("submit", () => {
+    const title = document.querySelector("#request-title").value.trim() || "New request";
+    showToast("Request submitted", `${title} was added to the request queue.`);
+    requestForm.reset();
+    requestDialog.close();
+  });
+
+  notificationsButton.addEventListener("click", () => {
+    const isOpen = !notificationDrawer.hidden;
+    notificationDrawer.hidden = isOpen;
+    notificationsButton.setAttribute("aria-expanded", String(!isOpen));
+  });
+
+  document.querySelector("#close-notifications").addEventListener("click", () => {
+    notificationDrawer.hidden = true;
+    notificationsButton.setAttribute("aria-expanded", "false");
+    notificationsButton.focus();
   });
 
   document.addEventListener("click", (event) => {
     const wishButton = event.target.closest("[data-wish]");
     const linkButton = event.target.closest("[data-link]");
+    const approvalButton = event.target.closest("[data-approval-action]");
+    const routeShortcut = event.target.closest("[data-route-shortcut]");
     if (wishButton) showToast("Wish sent", `${wishButton.dataset.wish} will receive your birthday message.`);
     if (linkButton) showToast("Opening quick link", `${linkButton.dataset.link} is ready for API routing.`);
+    if (approvalButton) showToast("Approval opened", "The approval detail view is ready for the next build pass.");
+    if (routeShortcut) navigate(routeShortcut.dataset.routeShortcut);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !notificationDrawer.hidden) {
+      notificationDrawer.hidden = true;
+      notificationsButton.setAttribute("aria-expanded", "false");
+    }
   });
 
   document.querySelector("#global-search").addEventListener("input", debounce((event) => {

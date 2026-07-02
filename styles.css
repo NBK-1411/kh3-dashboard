@@ -464,6 +464,13 @@ p {
   background: var(--primary-strong);
 }
 
+.topbar-actions .pill-button {
+  gap: 6px;
+  min-width: max-content;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
 .ghost-button {
   padding: 0 16px;
 }

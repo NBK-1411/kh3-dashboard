@@ -320,6 +320,7 @@ p {
 }
 
 .global-search {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -348,6 +349,56 @@ p {
 
 .global-search input::placeholder {
   color: var(--subtle);
+}
+
+.search-panel {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 10px);
+  right: 0;
+  left: 0;
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 10px;
+}
+
+.search-result {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  padding: 9px 10px;
+  text-align: left;
+}
+
+.search-result:hover {
+  background: var(--surface-soft);
+}
+
+.search-result span,
+.search-result small,
+.search-empty span {
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 800;
+}
+
+.search-result strong {
+  font-size: .94rem;
+}
+
+.search-empty {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
 }
 
 .topbar-actions {
@@ -700,6 +751,65 @@ p {
   padding: 20px;
 }
 
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.summary-card {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 12px;
+  min-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.summary-card span {
+  display: block;
+  margin-top: 4px;
+  color: var(--text);
+  font-weight: 900;
+}
+
+.summary-card small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.summary-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.summary-card.warning .summary-dot {
+  background: var(--warning);
+}
+
+.summary-card.success .summary-dot {
+  background: var(--success);
+}
+
+.summary-card.danger .summary-dot {
+  background: var(--danger);
+}
+
 .highlight-card {
   min-height: 170px;
   border-radius: var(--radius-md);
@@ -1011,6 +1121,84 @@ p {
   font-size: .86rem;
 }
 
+.activity-timeline,
+.resource-list {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.timeline-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.timeline-dot.warning {
+  background: var(--warning);
+}
+
+.timeline-dot.success {
+  background: var(--success);
+}
+
+.timeline-dot.danger {
+  background: var(--danger);
+}
+
+.timeline-row h3,
+.resource-row h3 {
+  margin: 0;
+  font-size: .96rem;
+  line-height: 1.25;
+}
+
+.timeline-row p,
+.resource-row p {
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.resource-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.resource-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.resource-type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+  color: var(--primary);
+  font-size: .72rem;
+  font-weight: 900;
+}
+
 .notification-drawer {
   position: fixed;
   z-index: 90;
@@ -1235,6 +1423,10 @@ p {
   .highlight-card {
     min-height: 150px;
   }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1040px) {
@@ -1290,7 +1482,8 @@ p {
   .people-grid,
   .utility-column,
   .progress-list,
-  .work-queue {
+  .work-queue,
+  .summary-grid {
     grid-template-columns: 1fr;
   }
 

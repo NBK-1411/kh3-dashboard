@@ -103,6 +103,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 4a5.8 5.8 0 0 1 4.6 9.4l4.1 4.1-1.4 1.4-4.1-4.1A5.8 5.8 0 1 1 9.8 4zm0 2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
             <label class="sr-only" for="global-search">Search people, resources, and requests</label>
             <input id="global-search" type="search" placeholder="Search people, resources, requests">
+            <div class="search-panel" id="search-panel" role="listbox" aria-label="Search results" hidden></div>
           </form>
 
           <div class="topbar-actions">
@@ -144,6 +145,8 @@
                   </div>
                 </div>
 
+                <section class="summary-grid" id="summary-grid" aria-label="Request pipeline summary"></section>
+
                 <section class="section-block">
                   <div class="section-header">
                     <div>
@@ -173,6 +176,17 @@
                     <button class="text-button" type="button" data-route-shortcut="tasks">View tasks</button>
                   </div>
                   <div class="work-queue" id="work-queue"></div>
+                </section>
+
+                <section class="section-block">
+                  <div class="section-header">
+                    <div>
+                      <p class="eyebrow">Latest movement</p>
+                      <h2>Activity timeline</h2>
+                    </div>
+                    <button class="text-button" type="button">Export</button>
+                  </div>
+                  <div class="activity-timeline" id="activity-timeline"></div>
                 </section>
 
                 <section class="people-grid">
@@ -238,6 +252,14 @@
                     <button class="text-button" type="button">See all</button>
                   </div>
                   <div class="announcement-list" id="announcement-list"></div>
+                </section>
+
+                <section class="widget-card">
+                  <div class="section-header compact">
+                    <h2>Recent resources</h2>
+                    <button class="text-button" type="button" data-route-shortcut="resources">Browse</button>
+                  </div>
+                  <div class="resource-list" id="resource-list"></div>
                 </section>
               </aside>
             </div>

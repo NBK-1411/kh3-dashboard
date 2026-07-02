@@ -74,6 +74,23 @@ const data = {
     { title: "Town hall acknowledgement", detail: "Please acknowledge the quarterly town hall notice.", time: "1 hr ago", tone: "warning" },
     { title: "Resource updated", detail: "The hybrid work policy was revised by HR.", time: "Yesterday", tone: "success" },
     { title: "New joiner", detail: "Akosua Mensah joins HR next week.", time: "Yesterday", tone: "success" }
+  ],
+  requestSummary: [
+    { label: "Submitted", value: 18, change: "+4 this week", tone: "primary" },
+    { label: "In review", value: 9, change: "3 due today", tone: "warning" },
+    { label: "Approved", value: 31, change: "+12 this month", tone: "success" },
+    { label: "Blocked", value: 2, change: "Needs escalation", tone: "danger" }
+  ],
+  resources: [
+    { title: "Hybrid work policy", meta: "Updated by HR - v3.2", type: "Policy" },
+    { title: "Procurement request form", meta: "Finance template", type: "Form" },
+    { title: "Incident response guide", meta: "IT Security", type: "Guide" }
+  ],
+  activity: [
+    { title: "Nabila acknowledged the town hall notice", meta: "Announcement - 12 min ago", tone: "success" },
+    { title: "Kojo requested laptop replacement approval", meta: "Request - 35 min ago", tone: "warning" },
+    { title: "HR published hybrid work policy v3.2", meta: "Resource - 1 hr ago", tone: "primary" },
+    { title: "Security reminder pinned for all departments", meta: "System - Yesterday", tone: "danger" }
   ]
 };
 
@@ -162,6 +179,9 @@ renderApprovals();
 renderAnnouncements();
 renderWorkQueue();
 renderNotifications();
+renderSummary();
+renderResources();
+renderActivity();
 bindInteractions();
 
 function setTheme(theme) {
@@ -311,6 +331,57 @@ function renderNotifications() {
   `).join("");
 }
 
+function renderSummary() {
+  const target = document.querySelector("#summary-grid");
+  target.innerHTML = data.requestSummary.map((item) => `
+    <article class="summary-card ${item.tone}">
+      <span class="summary-dot" aria-hidden="true"></span>
+      <div>
+        <strong>${item.value}</strong>
+        <span>${item.label}</span>
+        <small>${item.change}</small>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderResources() {
+  const target = document.querySelector("#resource-list");
+  target.innerHTML = data.resources.map((item) => `
+    <article class="resource-row">
+      <span class="resource-type">${item.type}</span>
+      <div>
+        <h3>${item.title}</h3>
+        <p>${item.meta}</p>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderActivity() {
+  const target = document.querySelector("#activity-timeline");
+  target.innerHTML = data.activity.map((item) => `
+    <article class="timeline-row">
+      <span class="timeline-dot ${item.tone}" aria-hidden="true"></span>
+      <div>
+        <h3>${item.title}</h3>
+        <p>${item.meta}</p>
+      </div>
+    </article>
+  `).join("");
+}
+
+function getSearchIndex() {
+  return [
+    ...data.birthdays.map((item) => ({ type: "People", title: item.name, meta: item.role, route: "people" })),
+    ...data.joiners.map((item) => ({ type: "People", title: item.name, meta: item.role, route: "people" })),
+    ...data.resources.map((item) => ({ type: "Resource", title: item.title, meta: item.meta, route: "resources" })),
+    ...data.approvals.map((item) => ({ type: "Approval", title: item.title, meta: item.meta, route: "approvals" })),
+    ...data.announcements.map((item) => ({ type: "Announcement", title: item.title, meta: item.meta, route: "announcements" })),
+    ...data.tasks.map((item) => ({ type: "Task", title: item.title, meta: `${item.owner} - ${item.due}`, route: "tasks" }))
+  ];
+}
+
 function bindInteractions() {
   const requestDialog = document.querySelector("#request-dialog");
   const requestForm = document.querySelector("#request-form");
@@ -387,10 +458,58 @@ function bindInteractions() {
 
   document.querySelector("#global-search").addEventListener("input", debounce((event) => {
     const value = event.target.value.trim();
-    if (value.length > 2) {
-      showToast("Search ready", `Searching for "${value}" across portal data.`);
-    }
+    renderSearchResults(value);
   }, 650));
+
+  document.querySelector(".global-search").addEventListener("submit", (event) => {
+    event.preventDefault();
+  });
+
+  document.querySelector("#global-search").addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeSearchPanel();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".global-search")) closeSearchPanel();
+  });
+}
+
+function renderSearchResults(query) {
+  const panel = document.querySelector("#search-panel");
+  if (query.length < 2) {
+    closeSearchPanel();
+    return;
+  }
+
+  const normalized = query.toLowerCase();
+  const results = getSearchIndex()
+    .filter((item) => `${item.type} ${item.title} ${item.meta}`.toLowerCase().includes(normalized))
+    .slice(0, 6);
+
+  panel.hidden = false;
+  panel.innerHTML = results.length
+    ? results.map((item) => `
+      <button class="search-result" type="button" data-search-route="${item.route}">
+        <span>${item.type}</span>
+        <strong>${item.title}</strong>
+        <small>${item.meta}</small>
+      </button>
+    `).join("")
+    : `<div class="search-empty"><strong>No results found</strong><span>Try a person, resource, request, or announcement.</span></div>`;
+
+  panel.querySelectorAll("[data-search-route]").forEach((button) => {
+    button.addEventListener("click", () => {
+      navigate(button.dataset.searchRoute);
+      document.querySelector("#global-search").value = "";
+      closeSearchPanel();
+    });
+  });
+}
+
+function closeSearchPanel() {
+  const panel = document.querySelector("#search-panel");
+  panel.hidden = true;
+  panel.innerHTML = "";
 }
 
 function navigate(route) {

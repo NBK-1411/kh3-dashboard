@@ -1,0 +1,49 @@
+<dialog class="request-dialog" id="request-dialog" aria-labelledby="request-dialog-title">
+  <form class="request-form" id="request-form" method="dialog">
+    <div class="drawer-panel-header">
+      <div>
+        <p class="eyebrow">Service catalog</p>
+        <h2 id="request-dialog-title">New request</h2>
+      </div>
+      <button class="icon-button small" type="button" id="close-request-dialog" aria-label="Close request form">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6.4 5 12.6 12.6-1.4 1.4L5 6.4zm12.6 1.4L6.4 19 5 17.6 17.6 5z"/></svg>
+      </button>
+    </div>
+
+    <div class="form-grid">
+      <label>
+        <span>Request type</span>
+        <select id="request-type" required>
+          <option value="">Choose a type</option>
+          <option>IT equipment</option>
+          <option>Leave support</option>
+          <option>Resource access</option>
+          <option>Facilities</option>
+        </select>
+      </label>
+      <label>
+        <span>Priority</span>
+        <select id="request-priority" required>
+          <option>Normal</option>
+          <option>High</option>
+          <option>Urgent</option>
+        </select>
+      </label>
+    </div>
+
+    <label>
+      <span>Title</span>
+      <input id="request-title" type="text" placeholder="Short request title" required>
+    </label>
+
+    <label>
+      <span>Details</span>
+      <textarea id="request-details" rows="4" placeholder="Add context, dates, links, or affected systems"></textarea>
+    </label>
+
+    <div class="dialog-actions">
+      <button class="ghost-button" type="button" id="cancel-request">Cancel</button>
+      <button class="pill-button" type="submit">Submit request</button>
+    </div>
+  </form>
+</dialog>

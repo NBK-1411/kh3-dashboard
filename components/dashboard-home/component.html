@@ -1,0 +1,64 @@
+<section class="dashboard-view" data-view="dashboard">
+  <div class="workplace-home">
+    <section class="workplace-welcome" aria-labelledby="welcome-title">
+      <div>
+        <p class="eyebrow">Workplace home</p>
+        <h2 id="welcome-title">Good morning, <span data-user-name>Yaa</span></h2>
+        <div class="welcome-meta">
+          <span data-user-department>Operations</span>
+          <span data-user-role>Operations Manager</span>
+          <span data-company-name>KH3 Group</span>
+          <span data-current-date>Thursday, 9 July 2026</span>
+        </div>
+      </div>
+      <div data-component="weather"></div>
+    </section>
+
+    <section class="home-search-section" aria-label="Global search">
+      <form class="global-search home-search" role="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 4a5.8 5.8 0 0 1 4.6 9.4l4.1 4.1-1.4 1.4-4.1-4.1A5.8 5.8 0 1 1 9.8 4zm0 2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
+        <label class="sr-only" for="global-search">Search people, documents, apps, projects</label>
+        <input id="global-search" type="search" placeholder="Search people, documents, apps, projects...">
+      </form>
+    </section>
+
+    <div data-component="pinned-apps"></div>
+
+    <section class="workplace-two-column">
+      <section class="section-block schedule-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Today</p>
+            <h2>Today's schedule</h2>
+          </div>
+          <button class="text-button" type="button" data-route-shortcut="calendar">Open calendar</button>
+        </div>
+        <div class="schedule-list" id="schedule-list"></div>
+        <div class="schedule-preview" aria-label="Calendar preview">
+          <span>Mon</span>
+          <span>Tue</span>
+          <span class="is-today">Today</span>
+          <span>Thu</span>
+          <span>Fri</span>
+        </div>
+      </section>
+      <div data-component="recent-documents"></div>
+    </section>
+
+    <div data-component="announcements"></div>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Focus</p>
+          <h2>My tasks</h2>
+        </div>
+        <button class="text-button" type="button" data-route-shortcut="tasks">View all</button>
+      </div>
+      <div data-component="task-list"></div>
+    </section>
+
+    <div data-component="department-shortcuts"></div>
+    <div data-component="quick-actions"></div>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+.app-footer {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 32px 24px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.app-version {
+  display: inline-block;
+}

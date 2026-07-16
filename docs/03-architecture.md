@@ -15,6 +15,7 @@
 | Search | PostgreSQL full-text search for MVP | Avoids premature search infrastructure |
 | Files | S3-compatible object storage | Durable file handling independent of app server |
 | Jobs | BullMQ + Redis or managed queue | Notifications, sync, scheduled publishing |
+| CRM integration | Backend adapter layer plus scheduled sync/webhook ingestion | Keeps the frontend independent from a specific CRM vendor |
 | Email | Provider abstraction | Allows SendGrid, SES, Postmark, SMTP |
 | Observability | OpenTelemetry, structured logs, Sentry | Debugging and production visibility |
 | Testing | Node test runner or PHPUnit, API integration tests, Playwright | Unit, integration, and end-to-end coverage |
@@ -29,6 +30,9 @@ flowchart LR
   API --> DB[("PostgreSQL")]
   API --> Storage["Object Storage"]
   API --> Queue["Queue / Jobs"]
+  API --> CRM["Third-party CRM"]
+  Queue --> CRM
+  CRM --> API
   Queue --> Email["Email Provider"]
   Queue --> DB
   API --> Audit["Audit Logger"]
@@ -49,6 +53,25 @@ flowchart LR
 - Admin configuration.
 - Audit logging.
 - Search.
+- CRM sync and write-back orchestration.
+
+## CRM Integration Architecture
+
+The portal should not call the third-party CRM directly from browser JavaScript. The frontend reads and mutates portal API endpoints; the backend owns CRM credentials, mapping, retries, permissions, and audit logs.
+
+Recommended components:
+
+- CRM adapter: vendor-specific client behind a stable internal interface such as `listPeople`, `listRequests`, `createRequest`, `updateApproval`, and `getSyncStatus`.
+- Sync worker: scheduled job that pulls changed CRM records into local portal tables for fast dashboard reads.
+- Webhook receiver: optional endpoint for CRM change events when the CRM supports signed webhooks.
+- Write-back queue: mutations created in the portal are validated, authorized, audited, queued, and posted to the CRM with retry handling.
+- Reconciliation job: compares local records against CRM source records and flags sync conflicts.
+
+Source of truth:
+
+- CRM is source of truth for employee/customer/request records that originate there.
+- Portal database stores cached projections, portal-only settings, workflow state, acknowledgements, notifications, audit logs, and sync metadata.
+- Portal UI displays sync health and last updated timestamps wherever stale data could affect decisions.
 
 ## Authorization Model
 
@@ -95,6 +118,7 @@ sequenceDiagram
 - Every mutation validates input on the backend.
 - Every mutation checks authorization server-side.
 - Every sensitive mutation writes an audit event in the same transaction where possible.
+- CRM-backed mutations write to the local audit log before and after CRM write-back so failed outbound sync attempts are traceable.
 
 ## Search Strategy
 
@@ -597,4 +621,3 @@ The architecture should support independently scaling high-demand modules, inclu
 * Calendar
 * Optional approved workflow modules
 This allows heavily used features to grow without affecting the performance of the rest of the intranet.
-

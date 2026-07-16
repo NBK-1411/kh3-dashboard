@@ -8,7 +8,11 @@
     <h1 id="page-title">Home</h1>
   </div>
 
-  <div class="topbar-company" data-component="company-badge"></div>
+  <form class="global-search topbar-search" role="search" data-search-form>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 4a5.8 5.8 0 0 1 4.6 9.4l4.1 4.1-1.4 1.4-4.1-4.1A5.8 5.8 0 1 1 9.8 4zm0 2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
+    <label class="sr-only" for="topbar-search">Search portal</label>
+    <input id="topbar-search" type="search" placeholder="Search people, requests, documents" data-global-search>
+  </form>
 
   <div class="topbar-actions">
     <button class="ghost-button company-switcher" type="button">Switch company</button>

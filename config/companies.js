@@ -5,7 +5,7 @@ export const companies = [
     shortName: "KH3",
     brandName: "KH3 Workplace",
     brandMeta: "KH3 Group",
-    logo: "./logo.jpeg"
+    logo: "./kh3-logo.png"
   },
   {
     id: "khy-ltd",
@@ -13,7 +13,7 @@ export const companies = [
     shortName: "KHY",
     brandName: "KH3 Workplace",
     brandMeta: "KHY Ltd",
-    logo: "./logo.jpeg"
+    logo: "./kh3-logo.png"
   }
 ];
 

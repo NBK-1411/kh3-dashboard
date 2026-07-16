@@ -15,14 +15,16 @@
     </section>
 
     <section class="home-search-section" aria-label="Global search">
-      <form class="global-search home-search" role="search">
+      <form class="global-search home-search" role="search" data-search-form>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 4a5.8 5.8 0 0 1 4.6 9.4l4.1 4.1-1.4 1.4-4.1-4.1A5.8 5.8 0 1 1 9.8 4zm0 2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
-        <label class="sr-only" for="global-search">Search people, documents, apps, projects</label>
-        <input id="global-search" type="search" placeholder="Search people, documents, apps, projects...">
+        <label class="sr-only" for="home-search">Search people, documents, apps, projects</label>
+        <input id="home-search" type="search" placeholder="Search people, documents, apps, projects..." data-global-search>
       </form>
     </section>
 
     <div data-component="pinned-apps"></div>
+    <div data-component="crm-sync"></div>
+    <div data-component="workflow-board"></div>
 
     <section class="workplace-two-column">
       <section class="section-block schedule-panel">
@@ -58,6 +60,7 @@
       <div data-component="task-list"></div>
     </section>
 
+    <div data-component="people-moments"></div>
     <div data-component="department-shortcuts"></div>
     <div data-component="quick-actions"></div>
   </div>

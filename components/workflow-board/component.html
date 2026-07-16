@@ -1,0 +1,34 @@
+<section class="workflow-board" aria-labelledby="workflow-board-title">
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Workflow center</p>
+      <h2 id="workflow-board-title">Requests and approvals</h2>
+    </div>
+    <button class="pill-button" type="button" data-open-request>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>
+      <span>New request</span>
+    </button>
+  </div>
+  <div class="workflow-grid">
+    <section class="workflow-panel" aria-labelledby="requests-title">
+      <div class="workflow-panel-header">
+        <div>
+          <h3 id="requests-title">Open requests</h3>
+          <p>Synced from CRM workflow records</p>
+        </div>
+        <span class="count-label" data-request-count>0 open</span>
+      </div>
+      <div class="workflow-list" data-requests></div>
+    </section>
+    <section class="workflow-panel" aria-labelledby="approvals-title">
+      <div class="workflow-panel-header">
+        <div>
+          <h3 id="approvals-title">Pending approvals</h3>
+          <p>Assigned decisions needing action</p>
+        </div>
+        <span class="count-label" data-approval-count>0 due</span>
+      </div>
+      <div class="workflow-list" data-approvals></div>
+    </section>
+  </div>
+</section>

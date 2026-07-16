@@ -16,10 +16,11 @@ This folder is the planning source of truth for the intranet dashboard/page/port
 - [09 Testing Strategy](./09-testing-strategy.md)
 - [10 Operations Guide](./10-operations-guide.md)
 - [11 Deployment Guide](./11-deployment-guide.md)
+- [12 CRM Integration Plan](./12-crm-integration-plan.md)
 
 ## Product Summary
 
-The application is an internal employee portal for announcements, employee resources, requests, approvals, directory lookup, tasks, notifications, and operational dashboards. It is designed for authenticated staff, department managers, HR/admin teams, and system administrators.
+The application is an internal employee portal for announcements, employee resources, requests, approvals, directory lookup, tasks, notifications, and operational dashboards. It is designed for authenticated staff, department managers, HR/admin teams, and system administrators. The portal should reflect trusted data from the company's third-party CRM and allow permitted employee actions to write back through controlled workflows.
 
 ## Default Build Direction
 
@@ -28,6 +29,7 @@ The application is an internal employee portal for announcements, employee resou
 - Backend: REST API service, recommended Node.js with Express or PHP depending on hosting preference
 - Database: PostgreSQL
 - Data access: SQL migrations and parameterized queries through the backend service
+- CRM integration: Backend adapter layer, scheduled sync jobs, webhooks where supported, and audited write-back queue
 - Auth: SSO-ready session authentication using OIDC/SAML provider integration and RBAC
 - Files: Object storage compatible with S3
 - Deployment: Dockerized app, PostgreSQL managed database, CI/CD with automated checks
@@ -43,6 +45,7 @@ The application is an internal employee portal for announcements, employee resou
 - Notifications
 - Admin settings
 - Audit logs
+- CRM sync status and integration admin
 
 ## Visual Direction
 

@@ -61,6 +61,7 @@ Standard error response:
 | Method | Path | Description | Permission |
 | --- | --- | --- | --- |
 | GET | `/api/dashboard` | Get personalized dashboard widgets | authenticated |
+| GET | `/api/dashboard/crm-status` | Get CRM provider, sync health, last sync, and record counts | admin or authenticated, depending on exposed fields |
 
 Example response:
 
@@ -222,7 +223,39 @@ Approval decision body:
 
 ## Webhooks And Integrations
 
-Post-MVP integration endpoints:
+CRM integration endpoints:
+
+| Method | Path | Description | Permission |
+| --- | --- | --- | --- |
+| GET | `/api/integrations/crm/status` | Read CRM connection health, last successful sync, and sync lag | `integration.read` |
+| POST | `/api/integrations/crm/sync` | Trigger a manual sync job | `integration.manage` |
+| GET | `/api/integrations/crm/mappings` | List CRM-to-portal field mappings | `integration.read` |
+| PATCH | `/api/integrations/crm/mappings` | Update allowed mapping configuration | `integration.manage` |
+| POST | `/api/integrations/crm/writebacks/:id/retry` | Retry a failed outbound CRM write-back | `integration.manage` |
+| POST | `/api/webhooks/crm/:provider` | Receive signed CRM webhook events | provider signature |
+
+CRM status response:
+
+```json
+{
+  "providerName": "Company CRM",
+  "health": "connected",
+  "mode": "scheduled_sync",
+  "lastSyncAt": "2026-07-14T10:42:00Z",
+  "syncIntervalSeconds": 900,
+  "recordCounts": {
+    "people": 128,
+    "requests": 42,
+    "approvals": 7
+  },
+  "writeBackQueue": {
+    "pending": 2,
+    "failed": 0
+  }
+}
+```
+
+Additional post-MVP integration endpoints:
 
 - `POST /api/integrations/hris/sync`
 - `POST /api/integrations/chat/events`
